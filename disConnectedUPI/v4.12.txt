@@ -1,3 +1,10 @@
 ++++++++++++++++++++++
 +OCP-DisConnected-UPI+
 ++++++++++++++++++++++
+Nodes Details
+-------------
+bastion.ocp4.example.com	192.168.0.230
+bootstrap.ocp4.example.com	192.168.0.231
+master0.ocp4.example.com	192.168.0.232
+master1.ocp4.example.com	192.168.0.233
+master2.ocp4.example.com	192.168.0.234
