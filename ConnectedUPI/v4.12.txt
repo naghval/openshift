@@ -33,7 +33,7 @@ RHEL8.6 installation on Esxi
 .
 login to bastion
 u: root
-p: Pshl@1357
+p: ******
 [root@bastion ~]# hostnamectl set-hostname bastion.ocp4.pdhyd.local
 [root@bastion ~]# hostname
 bastion.ocp4.pdhyd.local
@@ -111,7 +111,6 @@ repo id                                                                         
 App                                                                                             AppStream
 Base                                                                                            BaseOS
 epel                                                                                            Extra Packages for Enterprise Linux 8 - x86_64
-
 [root@bastion ~]# subscription-manager register
 Registering to: subscription.rhsm.redhat.com:443/subscription
 Username: sohail@prodevans.com
@@ -122,8 +121,6 @@ The registered system name is: bastion.ocp4.clst1.pdhyd.local
 [root@bastion ~]# subscription-manager auto-attach
 [root@bastion ~]# subscription-manager list
 [root@bastion ~]# subscription-manager status
-
-
 [root@bastion ~]# systemctl disable firewalld.service
 [root@bastion ~]# systemctl stop firewalld.service
 [root@bastion ~]# systemctl mask firewalld.service
@@ -174,7 +171,6 @@ options {
         /* https://fedoraproject.org/wiki/Changes/CryptoPolicy */
         include "/etc/crypto-policies/back-ends/bind.config";
 };
-
 logging {
         channel default_debug {
                 file "data/named.run";
@@ -219,17 +215,13 @@ bastion.ocp4.pdhyd.local.       IN      A       192.168.0.90
 api.ocp4.pdhyd.local.           IN      A       192.168.0.90
 api-int.ocp4.pdhyd.local.       IN      A       192.168.0.90
 *.apps.ocp4.pdhyd.local.        IN      A       192.168.0.90
-
 bootstrap.ocp4.pdhyd.local.     IN      A       192.168.0.97
-
 master0.ocp4.pdhyd.local.       IN      A       192.168.0.91
 master1.ocp4.pdhyd.local.       IN      A       192.168.0.92
 master2.ocp4.pdhyd.local.       IN      A       192.168.0.93
-
 worker0.ocp4.pdhyd.local.       IN      A       192.168.0.94
 worker1.ocp4.pdhyd.local.       IN      A       192.168.0.95
 worker2.ocp4.pdhyd.local.       IN      A       192.168.0.96
-
 [root@bastion ~]# cat /var/named/reverse.zone
 $TTL 1W
 @       IN      SOA     bastion.ocp4.pdhyd.local. root (
@@ -242,17 +234,13 @@ $TTL 1W
 90.0.168.192.in-addr.arpa.      IN      PTR bastion.ocp4.pdhyd.local.
 90.0.168.192.in-addr.arpa.      IN      PTR api.ocp4.pdhyd.local.
 90.0.168.192.in-addr.arpa.      IN      PTR api-int.ocp4.pdhyd.local.
-
 97.0.168.192.in-addr.arpa.      IN      PTR bootstrap.ocp4.pdhyd.local.
-
 91.0.168.192.in-addr.arpa.      IN      PTR master0.ocp4.pdhyd.local.
 92.0.168.192.in-addr.arpa.      IN      PTR master1.ocp4.pdhyd.local.
 93.0.168.192.in-addr.arpa.      IN      PTR master2.ocp4.pdhyd.local.
-
 94.0.168.192.in-addr.arpa.      IN      PTR worker0.ocp4.pdhyd.local.
 95.0.168.192.in-addr.arpa.      IN      PTR worker1.ocp4.pdhyd.local.
 96.0.168.192.in-addr.arpa.      IN      PTR worker2.ocp4.pdhyd.local.
-
 [root@bastion ~]# systemctl restart named.service
 [root@bastion ~]# nslookup 192.168.0.97
 97.0.168.192.in-addr.arpa       name = bootstrap.ocp4.pdhyd.local.
@@ -261,17 +249,14 @@ Server:         192.168.0.90
 Address:        192.168.0.90#53
 Name:   bootstrap.ocp4.pdhyd.local
 Address: 192.168.0.97
-
 [root@bastion ~]# dig bastion.ocp4.pdhyd.local +noall +answer
 bastion.ocp4.pdhyd.local. 604800 IN     A       192.168.0.90
 [root@bastion ~]# dig +noall +answer @192.168.0.90 bastion.ocp4.pdhyd.local
 bastion.ocp4.pdhyd.local. 604800 IN     A       192.168.0.90
-
 [root@bastion ~]# vim /etc/httpd/conf/httpd.conf
  45 Listen 8080
 :wq!
 [root@bastion ~]# systemctl restart httpd.service
-
 [root@bastion ~]# cat /etc/haproxy/haproxy.cfg
 global
   log       127.0.0.1 local2
@@ -333,7 +318,6 @@ listen ingress-router-80
   server worker0 worker0.ocp4.pdhyd.local:80 check inter 1s
   server worker1 worker1.ocp4.pdhyd.local:80 check inter 1s
   server worker2 worker2.ocp4.pdhyd.local:80 check inter 1s
-
 [root@bastion ~]# systemctl restart named.service
 [root@bastion ~]# systemctl restart httpd.service
 [root@bastion ~]# systemctl restart haproxy.service
